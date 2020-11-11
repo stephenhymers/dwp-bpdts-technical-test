@@ -1,0 +1,52 @@
+{% extends "_generic.njk" %}
+
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "button/macro.njk" import govukButton %}
+{% from "error-summary/macro.njk" import govukErrorSummary %}
+{% from "input/macro.njk" import govukInput %}
+
+{% set pageTitle = "Distance from London?" %}
+{% block pageTitle %}{{ "Error: " if errors }}{{ pageTitle }} - GOV.UK{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/"
+  }) }}
+{% endblock %}
+
+{% block content %}
+
+  <form method="post" novalidate>
+    {% if errorSummary.length > 0 %}
+      {{ govukErrorSummary({
+        titleText: "There is a problem",
+        errorList: errorSummary
+      }) }}
+    {% endif %}
+
+    {{ govukInput({
+      label: {
+        text: pageTitle,
+        classes: "govuk-label--xl",
+        isPageHeading: true
+      },
+      classes: "govuk-input--width-2",
+      hint: {
+        text: "Must be between 1 and 3 digits long"
+      },
+      id: "distance",
+      name: "distance",
+      inputmode: "numeric",
+      pattern: "[0-9]*",
+      spellcheck: false,
+      value: values["distance"],
+      errorMessage: errors["distance"]
+    }) }}
+
+    {{ govukButton({
+      text: "Continue"
+    }) }}
+  </form>
+
+{% endblock %}

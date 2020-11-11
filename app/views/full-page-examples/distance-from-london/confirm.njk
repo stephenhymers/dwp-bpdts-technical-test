@@ -1,0 +1,95 @@
+{% extends "_generic.njk" %}
+
+{% from "components/tabs/macro.njk" import govukTabs %}
+
+{% from "back-link/macro.njk" import govukBackLink %}
+{% from "panel/macro.njk" import govukPanel %}
+
+{% set distanceUsers %}
+  {% if distanceUsers.length > 0 %}
+    <table class="govuk-table">
+      <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        <th scope="col" class="govuk-table__header">ID</th>
+        <th scope="col" class="govuk-table__header">First Name</th>
+        <th scope="col" class="govuk-table__header">Last Name</th>
+        <th scope="col" class="govuk-table__header">Email</th>
+      </tr>
+      </thead>
+      <tbody class="govuk-table__body">
+      {% for user in distanceUsers %}
+        <tr class="govuk-table__row">
+          <th scope="row" class="govuk-table__header">{{ user.id }}</th>
+          <td class="govuk-table__cell">{{ user.first_name }}</td>
+          <td class="govuk-table__cell">{{ user.last_name }}</td>
+          <td class="govuk-table__cell">{{ user.email }}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  {% else %}
+    <h2 class="govuk-heading-m">No users found within that distance</h2>
+    {{ govukBackLink({
+      text: "Back",
+      href: "/full-page-examples/distance-from-london"
+    }) }}
+  {% endif %}
+{% endset -%}
+
+{% set londonUsersHtml %}
+  <table class="govuk-table">
+    <thead class="govuk-table__head">
+    <tr class="govuk-table__row">
+      <th scope="col" class="govuk-table__header">ID</th>
+      <th scope="col" class="govuk-table__header">First Name</th>
+      <th scope="col" class="govuk-table__header">Last Name</th>
+      <th scope="col" class="govuk-table__header">Email</th>
+    </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+    {% for user in londonUsers %}
+      <tr class="govuk-table__row">
+        <th scope="row" class="govuk-table__header">{{ user.id }}</th>
+        <td class="govuk-table__cell">{{ user.first_name }}</td>
+        <td class="govuk-table__cell">{{ user.last_name }}</td>
+        <td class="govuk-table__cell">{{ user.email }}</td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endset -%}
+
+{% set pageTitle = "Users Within " + distance + " Miles of London" %}
+{% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
+
+{% block beforeContent %}
+  {{ govukBackLink({
+    text: "Back",
+    href: "/full-page-examples/distance-from-london"
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      {{ govukTabs({
+        items: [
+          {
+            label: pageTitle,
+            id: "distance-users",
+            panel: {
+            html: distanceUsers
+          }
+          },
+          {
+            label: "All Users In London",
+            id: "london-users",
+            panel: {
+            html: londonUsersHtml
+          }
+          }
+        ]
+      }) }}
+    </div>
+  </div>
+{% endblock %}
